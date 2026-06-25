@@ -4,7 +4,7 @@ import { ChatOllama } from "@langchain/ollama";
 
 
 
-const llm = ChatOllama({
+const llm = new ChatOllama({
     model: "qwen3:4b",
     temperature: 0
 });
