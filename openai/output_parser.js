@@ -11,7 +11,7 @@ const model = new ChatOpenAI({
 async function callStringOutputParser() {
     const parser = new StringOutputParser();
 
-    const prompt = ChatPromptTemplate(
+    const prompt = ChatPromptTemplate.fromMessages(
         [
             ["system", "Generate a joke based on a word provided by the user."],
             ["user", "{input}"]
