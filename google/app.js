@@ -107,5 +107,36 @@ async function callStructuredOutoutParserWithZod() {
     });
 }
 
-const response = await callStructuredOutoutParserWithZod();
+// const response = await callStructuredOutoutParserWithZod();
+// console.log(response);
+
+async function recipe(recipe) {
+    const parser = StructuredOutputParser.fromZodSchema(
+        z.object({
+            recipe: z.string().describe("Recipe name"),
+
+            ingredients: z
+                .array(z.string())
+                .describe("List of ingredients"),
+
+            instruction: z
+                .string()
+                .describe("Step-by-step cooking instructions"),
+        })
+    );
+    const prompt = ChatPromptTemplate.fromTemplate(`
+        You are an expert chef. Generate a delicious recipe based on the following request.
+        Request: {user_request}
+        {format_instructions}
+    `)
+
+    const chain = prompt.pipe(model).pipe(parser);
+
+    return await chain.invoke({
+        user_request: `${recipe}`,
+        format_instructions: parser.getFormatInstructions()
+    })
+}
+
+const response = await recipe("Maggie");
 console.log(response);
